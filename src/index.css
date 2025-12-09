@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #020617; /* Fondo dark slate */
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* --- ESTILO DE SCROLLBAR --- */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B1120; 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b; 
+  border-radius: 4px;
+  border: 2px solid #0B1120;
+}
+
+/* CAMBIO: Azul al pasar el mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6; /* blue-500 */
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b #0B1120;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
