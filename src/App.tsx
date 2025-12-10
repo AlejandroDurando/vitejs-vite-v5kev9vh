@@ -3,6 +3,21 @@ import { Search, Copy, Check, Eye, EyeOff, FileText, LayoutGrid } from 'lucide-r
 import { fetchData } from './services/dataFetcher';
 import { DisposicionViewer } from './components/DisposicionViewer';
 
+// --- HOOK DE RENDIMIENTO (DEBOUNCE) ---
+// Esto hace que la búsqueda espere a que termines de escribir
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  return debouncedValue;
+}
+
 function App() {
   const [view, setView] = useState<'SEARCH' | 'DOCS'>('SEARCH');
   const [docYear, setDocYear] = useState(2025);
@@ -10,6 +25,10 @@ function App() {
   const [mode, setMode] = useState<'CODIGOS' | 'MATRICULAS'>('CODIGOS');
   const [category, setCategory] = useState('SUCURSALES');
   const [query, setQuery] = useState('');
+  
+  // Usamos el valor "retrasado" para filtrar, así no se tilda al escribir rápido
+  const debouncedQuery = useDebounce(query, 300);
+
   const [data, setData] = useState<any[]>([]);
   const [keywords, setKeywords] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -19,7 +38,12 @@ function App() {
   // Carga inicial de Palabras Clave
   useEffect(() => {
     fetchData('PALABRAS_CLAVE').then((res: any) => {
-      setKeywords(res);
+      // Optimizamos las palabras clave al cargarlas
+      const optimizedKeywords = res.map((k: any) => ({
+        ...k,
+        _searchStr: Object.values(k).join(' ').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      }));
+      setKeywords(optimizedKeywords);
     }).catch(err => console.error(err));
   }, []);
 
@@ -32,8 +56,25 @@ function App() {
     
     const targetCategory = mode === 'MATRICULAS' ? 'MATRICULAS' : category;
     setLoading(true);
+    
     fetchData(targetCategory).then((res: any) => {
-      setData(res);
+      // --- OPTIMIZACIÓN CRÍTICA ---
+      // Pre-calculamos el texto de búsqueda (sin acentos, minúsculas) UNA SOLA VEZ al cargar.
+      // Así el filtrado en vivo es instantáneo porque solo compara texto plano.
+      const optimizedData = res.map((item: any) => {
+        // Juntamos todos los campos importantes en una sola cadena limpia
+        const rawText = mode === 'MATRICULAS' 
+            ? `${item.MATRICULA} ${item.MATERIAL}`
+            : `${item.CODIGO} ${item.DESCRIPCION}`;
+            
+        return {
+            ...item,
+            // Guardamos esta propiedad oculta "_searchStr" para buscar rápido
+            _searchStr: rawText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        };
+      });
+      
+      setData(optimizedData);
       setLoading(false);
     });
   }, [category, mode, view]);
@@ -44,47 +85,45 @@ function App() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // --- LÓGICA DE FILTRADO OPTIMIZADA (Para que no se tilde la PC) ---
+  // --- LÓGICA DE FILTRADO DE ALTO RENDIMIENTO ---
+  // Ahora usamos 'debouncedQuery' en lugar de 'query'
   const filteredData = useMemo(() => {
-    if (!query && !showAll) return [];
-    if (!query && showAll) return data; 
+    // Si no hay búsqueda (y no se pide ver todo), retornamos vacío rápido
+    if (!debouncedQuery && !showAll) return [];
+    if (!debouncedQuery && showAll) return data; 
 
-    const q = query.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // Normalizamos lo que escribió el usuario una sola vez
+    const q = debouncedQuery.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     
-    // 1. Buscamos códigos relacionados en Palabras Clave (Pre-cálculo)
+    // 1. Buscamos códigos relacionados en Palabras Clave (Solo si es necesario)
     let targetCodesFromKeywords: string[] = [];
     if (mode === 'CODIGOS' && q.length > 2 && keywords.length > 0) {
         const sampleKey = keywords[0];
-        const wordKey = Object.keys(sampleKey).find(k => k.includes('PALABRA') || k.includes('HERRAMIENTA')) || 'PALABRA';
         const codeKey = Object.keys(sampleKey).find(k => k.includes('CODIGO')) || 'CODIGO';
 
+        // Buscamos sobre la propiedad optimizada _searchStr
         targetCodesFromKeywords = keywords
-            .filter(k => {
-                const val = (k[wordKey] || '').toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                return val.includes(q);
-            })
+            .filter(k => k._searchStr && k._searchStr.includes(q))
             .map(k => (k[codeKey] || '').toString());
     }
 
-    // 2. Filtrado rápido
+    // 2. Filtrado Ultrarrápido usando el índice pre-calculado (_searchStr)
     return data.filter((item) => {
-      const getVal = (val: any) => (val || '').toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      
-      if (mode === 'MATRICULAS') {
-        return getVal(item.MATRICULA).includes(q) || getVal(item.MATERIAL).includes(q);
-      } else {
-        if (getVal(item.CODIGO).includes(q) || getVal(item.DESCRIPCION).includes(q)) return true;
-        if (targetCodesFromKeywords.length > 0) {
-            return targetCodesFromKeywords.includes((item.CODIGO || '').toString());
-        }
-        return false;
-      }
-    });
-  }, [data, query, showAll, mode, keywords]);
+      // Chequeo directo ultrarrápido
+      if (item._searchStr && item._searchStr.includes(q)) return true;
 
-  // Límite de renderizado: Mostramos hasta 100 resultados (en PC aguantan bien)
+      // Chequeo de palabras clave (si aplica)
+      if (targetCodesFromKeywords.length > 0) {
+          return targetCodesFromKeywords.includes((item.CODIGO || '').toString());
+      }
+      return false;
+    });
+  }, [data, debouncedQuery, showAll, mode, keywords]);
+
+  // Límite de renderizado
   const dataToRender = filteredData.slice(0, 100); 
 
+  // Highlighter visual (solo para pintar de azul, no afecta la lógica de búsqueda)
   const HighlightText = ({ text, highlight }: { text: string, highlight: string }) => {
     if (!text) return null;
     if (!highlight || highlight.length < 2) return <>{text}</>;
@@ -109,7 +148,6 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#020617] to-[#1e3a8a] flex flex-col items-center p-4 font-sans text-white">
       
-      {/* CAMBIO PC: Ancho máximo aumentado a 6xl para aprovechar el monitor */}
       <div className="w-full max-w-6xl bg-[#0B1120] rounded-xl shadow-lg border border-slate-700 p-2 mb-4 flex justify-between items-center sticky top-4 z-50 backdrop-blur-md bg-opacity-95">
         <div className="flex gap-2">
           <button 
@@ -140,7 +178,6 @@ function App() {
         )}
       </div>
 
-      {/* CAMBIO PC: Contenedor más ancho */}
       <div className="w-full max-w-6xl bg-[#0B1120] rounded-2xl shadow-2xl overflow-hidden border border-slate-700 min-h-[600px]">
         
         {view === 'SEARCH' && (
@@ -151,7 +188,7 @@ function App() {
                 Buscador de códigos y matrículas
               </h1>
 
-              <div className="flex bg-slate-800 p-1 rounded-lg mb-6 max-w-md"> {/* Limitado el ancho de los botones */}
+              <div className="flex bg-slate-800 p-1 rounded-lg mb-6 max-w-md">
                 <button onClick={() => setMode('CODIGOS')} className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${mode === 'CODIGOS' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}>CÓDIGOS</button>
                 <button onClick={() => setMode('MATRICULAS')} className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${mode === 'MATRICULAS' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}>MATRÍCULAS</button>
               </div>
@@ -173,6 +210,10 @@ function App() {
                   onChange={(e) => setQuery(e.target.value)} 
                 />
                 <Search className="absolute left-4 top-4 text-slate-500 w-5 h-5" />
+                {/* Indicador de carga sutil si está escribiendo pero esperando el debounce */}
+                {query !== debouncedQuery && (
+                    <div className="absolute right-4 top-4 animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+                )}
               </div>
 
               <div className="flex justify-end">
@@ -190,18 +231,15 @@ function App() {
               {loading ? <div className="text-center text-slate-500 py-10 animate-pulse">Cargando datos...</div> : 
                dataToRender.length > 0 ? (
                 
-                // CAMBIO PC: Aquí usamos CSS GRID para mostrar varias columnas en pantallas grandes
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  
                   {dataToRender.map((item, idx) => {
                     const codeValue = mode === 'MATRICULAS' ? item.MATRICULA : item.CODIGO;
                     return (
                       <div key={idx} className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-4 hover:border-blue-500/50 transition-colors group flex flex-col h-full">
                         <div className="flex justify-between items-start mb-2">
                             <h3 className="text-blue-400 font-bold text-lg flex items-center gap-2">
-                              {/* Texto simplificado para PC */}
                               <span className="text-xs text-slate-500 font-normal uppercase tracking-wider border border-slate-700 px-1 rounded">{mode === 'CODIGOS' ? 'COD' : 'MAT'}</span>
-                              <HighlightText text={codeValue} highlight={query} />
+                              <HighlightText text={codeValue} highlight={debouncedQuery} />
                             </h3>
                             {mode === 'MATRICULAS' && (
                             <button 
@@ -215,7 +253,7 @@ function App() {
                         </div>
                         
                         <p className="text-slate-300 text-sm leading-relaxed flex-1">
-                            <HighlightText text={mode === 'MATRICULAS' ? item.MATERIAL : item.DESCRIPCION} highlight={query} />
+                            <HighlightText text={mode === 'MATRICULAS' ? item.MATERIAL : item.DESCRIPCION} highlight={debouncedQuery} />
                         </p>
                         
                         {item.BIEN_DE_USO && (
