@@ -11,7 +11,6 @@ export const DISPOSICIONES = {
       "Que, la Resolución E.P.E N° 527/2019 faculta a la Gerencia de Administración a disponer la Reglamentación de Compras Menores y Fondos Fijos...",
       "Que, resulta oportuno actualizar la nómina de responsables habilitados para cada uno de los Fondos Fijos en vigencia..."
     ],
-    // AQUI ESTA EL CAMBIO IMPORTANTE: ESTRUCTURA TITULO + CONTENIDO (ARRAY)
     articulos: [
       { 
         numero: 1, 
@@ -189,7 +188,7 @@ export const DISPOSICIONES = {
         responsables: [
           { nombre: "Cordero, Diego", legajo: "71.734", dni: "26.609.648" },
           { nombre: "Dalmazzo, Rodrigo", legajo: "65.942", dni: "31.364.983" },
-          { nombre: "Pereyra Monica S", legajo: "74.619", dni: "28.322.580" },
+          { nombre: "Pereyra Monica S", legajo: "74619", dni: "28.322.580" },
           { nombre: "Pastore, Emiliano", legajo: "83.384", dni: "33.212.816" },
           { nombre: "Rastelli, Mauro", legajo: "83.774", dni: "35.953.623" }
         ]
@@ -202,9 +201,9 @@ export const DISPOSICIONES = {
         responsables: [
           { nombre: "Lopez, Mauro Nicolas", legajo: "69.656", dni: "31.473.924" },
           { nombre: "Andreucci Michelot, Mariana", legajo: "62.134", dni: "22.715.739" },
-          { nombre: "Ropolo Federico Osvaldo", legajo: "66.628", dni: "29.348.316" },
+          { nombre: "Ropolo Federico Osvaldo", legajo: "66628", dni: "29.348.316" },
           { nombre: "Giorgetti, María Alejandra", legajo: "64.171", dni: "25.398.153" },
-          { nombre: "Juarez, Micaela A.", legajo: "83.776", dni: "39.123.608" },
+          { nombre: "Juarez, Micaela A.", legajo: "83776", dni: "39.123.608" },
           { nombre: "Durando Alejandro", legajo: "71.564", dni: "34.935.138" },
           { nombre: "Tomasini Daiana", legajo: "76.718", dni: "36.216.600" }
         ]
@@ -229,10 +228,10 @@ export const DISPOSICIONES = {
         cuenta: "7097/06 - 33005209",
         monto: "$ 6.000.000,00",
         responsables: [
-          { nombre: "Berrino Cristian Hugo", legajo: "62.969", dni: "23.086.046" },
+          { nombre: "Berrino Cristian Hugo", legajo: "62969", dni: "23.086.046" },
           { nombre: "Besarez, Abigail", legajo: "82.772", dni: "31.851.844" },
           { nombre: "Hartmann, Mauricio Luis", legajo: "62.921", dni: "25.196.422" },
-          { nombre: "Latino Gustavo", legajo: "62.158", dni: "24.411.791" },
+          { nombre: "Latino Gustavo", legajo: "62158", dni: "24.411.791" },
           { nombre: "Díaz, Lucila", legajo: "83.383", dni: "39.755.331" },
           { nombre: "Chianalino, Juan J.", legajo: "81.797", dni: "34.673.955" }
         ]
@@ -249,7 +248,7 @@ export const DISPOSICIONES = {
           { nombre: "Juaréz, Santiago", legajo: "83.375", dni: "41.905.020" },
           { nombre: "Salzqueber, Sebastián", legajo: "82.972", dni: "30.167.149" },
           { nombre: "Sabellotti, Antonio", legajo: "79.986", dni: "35.953.780" },
-          { nombre: "Fassanelli, Luisina", legajo: "84.330", dni: "37.452.073" }
+          { nombre: "Fassanelli, Luisina", legajo: "84330", dni: "37.452.073" }
         ]
       },
       // --- NOROESTE Y OESTE ---
@@ -261,7 +260,7 @@ export const DISPOSICIONES = {
         responsables: [
           { nombre: "Alisiardi, Gerardo", legajo: "72.780", dni: "31.831.760" },
           { nombre: "Guirado, Demichelis F.", legajo: "79.392", dni: "37.017.329" },
-          { nombre: "Sarassio Vanesa Yanina", legajo: "83.539", dni: "31.273.415" },
+          { nombre: "Sarassio Vanesa Yanina", legajo: "83539", dni: "31.273.415" },
           { nombre: "Sarassio, Damián", legajo: "78.906", dni: "29.149.391" },
           { nombre: "Argañaraz, Eduardo A.", legajo: "57.845", dni: "22.817.375" },
           { nombre: "Blonski, Franco Benjamín", legajo: "63.133", dni: "25.077.083" }
@@ -274,7 +273,7 @@ export const DISPOSICIONES = {
         monto: "$ 2.100.000,00",
         responsables: [
           { nombre: "Astudillo, Manuel A", legajo: "68.781", dni: "26.712.655" },
-          { nombre: "Luna Emanuel Roman", legajo: "82.769", dni: "37.266.034" },
+          { nombre: "Luna Emanuel Roman", legajo: "82769", dni: "37.266.034" },
           { nombre: "Diaz, Estefanía", legajo: "82.866", dni: "35.883.211" },
           { nombre: "Luna, Ezequiel Federico", legajo: "81.218", dni: "37.300.411" }
         ]
@@ -289,7 +288,7 @@ export const DISPOSICIONES = {
           { nombre: "Langhi, Waldemar L.", legajo: "65.911", dni: "24.410.384" },
           { nombre: "Arta, Jorge Luis", legajo: "82.656", dni: "30.351.044" },
           { nombre: "Mascotto, Ana Laura", legajo: "74.415", dni: "27.237.273" },
-          { nombre: "Marquez, Ezequiel Omar", legajo: "68.406", dni: "33.128.570" }
+          { nombre: "Marquez, Ezequiel Omar", legajo: "68406", dni: "33.128.570" }
         ]
       },
       {
@@ -316,7 +315,7 @@ export const DISPOSICIONES = {
           { nombre: "Vezzoni, Cristian A.", legajo: "73.126", dni: "27.447.550" },
           { nombre: "Avalos, Alejandrina I.", legajo: "71.831", dni: "27.237.196" },
           { nombre: "Arzuffi, Matías R.", legajo: "82.206", dni: "29.579.844" },
-          { nombre: "Pino, Claudio", legajo: "65.492", dni: "30.640.706" }
+          { nombre: "Pino, Claudio", legajo: "65492", dni: "30.640.706" }
         ]
       },
       {
@@ -325,8 +324,8 @@ export const DISPOSICIONES = {
         cuenta: "5452/02 - 33000235",
         monto: "$ 5.000.000,00",
         responsables: [
-          { nombre: "Pascualetto, Juan Manuel", legajo: "59.407", dni: "22.438.423" },
-          { nombre: "Olmedo, Valeria Yanina", legajo: "76.352", dni: "26.349.314" },
+          { nombre: "Pascualetto, Juan Manuel", legajo: "59407", dni: "22.438.423" },
+          { nombre: "Olmedo, Valeria Yanina", legajo: "76352", dni: "26.349.314" },
           { nombre: "Biasutti, Leonel S.", legajo: "65.461", dni: "27.854.977" },
           { nombre: "Mazzer, Verónica", legajo: "59.423", dni: "23.799.813" }
         ]
@@ -337,7 +336,7 @@ export const DISPOSICIONES = {
         cuenta: "1379/07 - 33005179",
         monto: "$ 2.500.000,00",
         responsables: [
-          { nombre: "Solari, Hernan", legajo: "78.728", dni: "28.255.616" },
+          { nombre: "Solari, Hernan", legajo: "78728", dni: "28.255.616" },
           { nombre: "Pietrani, Melina", legajo: "78.582", dni: "30.270.525" },
           { nombre: "Lisey, Vanesa", legajo: "82.248", dni: "31.384.517" },
           { nombre: "Diaz, Emanuel", legajo: "74.203", dni: "31.384.577" },
@@ -351,7 +350,7 @@ export const DISPOSICIONES = {
         monto: "$ 3.500.000,00",
         responsables: [
           { nombre: "Rocha, Oscar S.", legajo: "45.458", dni: "16.645.778" },
-          { nombre: "Pablo, Mariana Dalila", legajo: "84.202", dni: "41.638.486" },
+          { nombre: "Pablo, Mariana Dalila", legajo: "84202", dni: "41.638.486" },
           { nombre: "Bertino, Jorge Daniel", legajo: "58.621", dni: "22.727.916" },
           { nombre: "Malier, Diego A.", legajo: "72.146", dni: "27.889.493" }
         ]
@@ -364,7 +363,7 @@ export const DISPOSICIONES = {
         responsables: [
           { nombre: "Montenegro, Virginia", legajo: "83.483", dni: "38.818.507" },
           { nombre: "Bravin, Mariano A.", legajo: "65.409", dni: "28.135.529" },
-          { nombre: "Battistelli, Jesica Noelia", legajo: "83.482", dni: "31.038.989" },
+          { nombre: "Battistelli, Jesica Noelia", legajo: "83482", dni: "31.038.989" },
           { nombre: "Gómez, Eliana R.", legajo: "77.772", dni: "36.796.432" }
         ]
       }

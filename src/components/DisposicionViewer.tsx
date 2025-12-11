@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FileText, Search, Users, CreditCard, ChevronDown, ChevronRight } from 'lucide-react';
 import { DISPOSICIONES } from '../data/disposicionData';
 
+// Componente pequeño para el Acordeón
 const ArticleAccordion = ({ articulo }: { articulo: { numero: number, titulo: string, contenido: string[] } }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -22,14 +23,10 @@ const ArticleAccordion = ({ articulo }: { articulo: { numero: number, titulo: st
   );
 };
 
-export function NormativaViewer({ year }: { year: number }) { // Si tu archivo se llama DisposicionViewer, cambia el nombre de la funcion aqui
+// ESTA LÍNEA ES LA CLAVE: "export function" (Asegúrate de copiarla)
+export function DisposicionViewer({ year }: { year: number }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'NORMATIVAS' | 'FONDOS'>('FONDOS'); // Cambié a 'NORMATIVAS' si usas ese enum
-  // NOTA: Como en el WikiViewer usamos tabs externas, aquí quizas solo recibimos "year".
-  // Pero mantendré la lógica interna por seguridad. Si usas WikiViewer, asegúrate que los tabs coincidan.
-  
-  // Como en WikiViewer ya filtramos por "Normativa", aquí mostraremos AMBOS (Fondos y Texto) o usaremos los tabs internos.
-  // Voy a mantener los tabs internos "Fondos Asignados" vs "Normativa Legal" que teniamos.
+  const [activeTab, setActiveTab] = useState<'NORMATIVAS' | 'FONDOS'>('FONDOS');
   
   const data = DISPOSICIONES[year as keyof typeof DISPOSICIONES];
   if (!data) return <div className="text-center p-10 text-slate-400">No hay disposición cargada para el año {year}</div>;
@@ -66,8 +63,6 @@ export function NormativaViewer({ year }: { year: number }) { // Si tu archivo s
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
           {filteredFondos.map((fondo, idx) => (
             <div key={idx} className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden hover:border-blue-500/30 transition-all shadow-lg group">
-              
-              {/* CAMBIO CLAVE: Responsive Flex (Columna en móvil, Fila en PC) */}
               <div className="p-4 border-b border-slate-700 bg-slate-900/30 group-hover:bg-slate-900/50 transition-colors">
                 <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-3 mb-3">
                   <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-1 rounded tracking-wider self-start">FONDO #{fondo.numero}</span>
@@ -79,7 +74,6 @@ export function NormativaViewer({ year }: { year: number }) { // Si tu archivo s
                 <h3 className="text-white font-bold text-lg leading-tight mt-1">{fondo.nombre}</h3>
                 <div className="flex items-center gap-2 mt-3 text-slate-400 text-xs"><CreditCard className="w-3 h-3 text-blue-400" /><span className="font-mono bg-slate-950 px-2 py-0.5 rounded text-slate-500">{fondo.cuenta}</span></div>
               </div>
-              
               <div className="p-4 bg-slate-800/50">
                 <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2"><Users className="w-3 h-3" /> Responsables</h4>
                 <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1 custom-scrollbar">
