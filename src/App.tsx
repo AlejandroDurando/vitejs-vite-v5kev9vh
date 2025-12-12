@@ -118,7 +118,7 @@ function App() {
             <div className="p-4 sm:p-8 pb-4">
               <h1 className="text-xl sm:text-3xl font-bold flex items-center gap-3 mb-6">
                 <Search className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />
-                Buscador EPE
+                Buscador de códigos y matrículas
               </h1>
 
               <div className="flex bg-slate-800 p-1 rounded-lg mb-6 max-w-md w-full">
