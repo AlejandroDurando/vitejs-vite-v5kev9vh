@@ -11,7 +11,7 @@ function useDebounce<T>(value: T, delay: number): T {
 
 function App() {
   const [view, setView] = useState<'SEARCH' | 'DOCS'>('SEARCH');
-  const [docYear, setDocYear] = useState(2025);
+  const [docYear, setDocYear] = useState(2026);
   const [mode, setMode] = useState<'CODIGOS' | 'MATRICULAS'>('CODIGOS');
   const [category, setCategory] = useState('SUCURSALES');
   const [query, setQuery] = useState('');
@@ -107,7 +107,7 @@ function App() {
         {view === 'DOCS' && (
           <select value={docYear} onChange={(e) => setDocYear(Number(e.target.value))} className="bg-slate-800 text-white text-sm border border-slate-600 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-400 w-auto">
             <option value={2025}>2025</option>
-            <option value={2026} disabled>2026</option>
+            <option value={2026}>2026</option>
           </select>
         )}
       </div>
