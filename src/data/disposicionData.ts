@@ -767,6 +767,38 @@ export const DISPOSICIONES = {
           { nombre: "Gómez, Eliana R.", legajo: "77.772", dni: "36.796.432" }
         ]
       }
+    ],
+  
+
+anexos: [
+  {
+    id: "VIII",
+    titulo: "ANEXO VIII - MATERIALES Y SERVICIOS EXCEPTUADOS DE STOCK",
+    items: [
+      { codigo: 103, descripcion: "Materiales menores de seguridad." },
+      { codigo: 105, descripcion: "Bibliografía No inventariable" },
+      { codigo: 203, descripcion: "Compra de repuestos y materiales telefónicos para sistemas de comunicaciones y de seguridad electrónica, con autorización del Área Control y Comunicaciones." },
+      { codigo: 205, descripcion: "Compra de materiales y repuestos para mantenimiento de Transformadores" },
+      { codigo: 206, descripcion: "Compra de útiles e impresos de oficina." },
+      { codigo: 207, descripcion: "Materiales para mantenimiento de Lineas y redes eléctricas (incluye materiales eléctricos, de construcción, de ferretería, pinturas y solventes) EXCEPTUANDO MATERIALES NORMALIZADOS" },
+      { codigo: 209, descripcion: "Combustibles, lubricantes y accesorios para motosierras, motoguadañas, tracto-segadoras, hormigoneras y equipos en general, sin número de móvil asignado." },
+      { codigo: 211, descripcion: "Compra de materiales y productos de limpieza." },
+      { codigo: 214, descripcion: "Materiales y repuestos para E.T. y Centro de Distribución." },
+      { codigo: 216, descripcion: "Impresión de tarjetas personales con el logo de la Empresa, previa autorización del Gerente respectivo." },
+      { codigo: 218, descripcion: "Materiales específicos para el sector conexionista y fraude. Previa autorización del Área Control de Perdidas." },
+      { codigo: 220, descripcion: "Materiales para mantenimiento de Bienes de Uso." },
+      { codigo: 221, descripcion: "Materiales y repuestos para generación." },
+      { codigo: 228, descripcion: "Adquisición de componente y materiales eléctricos - electrónicos e insumos inherentes, para reparación de artefactos dañados." },
+      { codigo: 316, descripcion: "Agua potable en contenedores o Dispenser. Compra de hielo en épocas estival para emergencias." },
+      { codigo: 321, descripcion: "Materiales para mantenimiento de edificios e instalaciones afectadas al servicio." },
+      { codigo: 400, descripcion: "Combustibles y Lubricantes para: camiones, grúas, movilidades livianas" },
+      { codigo: 401, descripcion: "Compra de repuestos destinados a movilidades y equipos hidráulicos para el mantenimiento correctivo, ordinario y preventivo." },
+      { codigo: 418, descripcion: "Compra de accesorios y elementos de seguridad vial con la autorización de la Delegación de Unidad Movilidades correspondiente." },
+      { codigo: 420, descripcion: "Combustibles para grupo electrógenos. Agua potable. Cloacas." },
+      { codigo: 421, descripcion: "Materiales para mantenimiento y reparación de grupos electrógenos." },
+      { codigo: 612, descripcion: "Compra de materiales, insumos y productos de equipamientos informáticos." }
     ]
   }
+]
+}   
 };
